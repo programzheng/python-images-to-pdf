@@ -1,13 +1,23 @@
+import sys
+import imghdr
 import tkinter
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 from PIL import Image
 from init import OUTPUT_FOLDER
 
-root = tkinter.Tk()
-files = filedialog.askopenfilenames(parent=root, title='Choose a file')
+root = tkinter.Tk(className='python-images-to-pdf')
+files = filedialog.askopenfilenames(parent=root, title='Choose files')
 
+#not choose any file exit program
+if len(files) == 0:
+    messagebox.showerror(title='Error', message='Not choose files')
+    sys.exit(1)
 images = []
 for file in files:
+    #check file is image
+    if imghdr.what(file) is None:
+        messagebox.showerror(title='Error', message='Choose error files')
+        sys.exit(1)
     image = Image.open(r''+file)
     im = image.convert('RGB')
     images.append(im)
